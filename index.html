@@ -78,11 +78,11 @@
     <p>I promise snacks, good vibes, and maximum appreciation.</p>
 
     <div class="buttons" id="btnWrap">
-      <button id="yesBtn">Yes 💖</button>
-      <button id="noBtn">No 🙃</button>
+      <button id="yesBtn">Yes </button>
+      <button id="noBtn">No </button>
     </div>
 
-    <div class="result" id="result">YAY!! 🥰💞 See you on Valentine’s!</div>
+    <div class="result" id="result">YAY!! See you on Valentine’s!</div>
     <div class="tiny" id="tinyHint">Tip: “No” is having a hard time today.</div>
   </main>
 
@@ -96,14 +96,13 @@
     let noClicks = 0;
 
     const noPhrases = [
-      "No 🙃",
+      "No",
       "Are you sure?",
       "Really sure?",
       "Think again…",
-      "But I’m cute 🥺",
+      "Come on...",
       "Last chance!",
-      "Okay but… please? 😭",
-      "You’re breaking my heart 💔",
+      "Okay but… please? ",
       "Fine… what if I say pretty please?",
       "You meant YES, right?"
     ];
@@ -139,12 +138,12 @@
       // optional: fade "No" out slightly over time
       noBtn.style.opacity = String(Math.max(1 - noClicks * 0.07, 0.35));
 
-      tinyHint.textContent = "There is only one correct answer 😌";
+      tinyHint.textContent = "There is only one correct answer";
     });
 
     yesBtn.addEventListener("click", () => {
       result.classList.add("show");
-      tinyHint.textContent = "Screenshot this moment for evidence 😄";
+      tinyHint.textContent = "Screenshot this moment for evidence ";
       // lock buttons
       yesBtn.disabled = true;
       noBtn.disabled = true;

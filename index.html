@@ -36,7 +36,7 @@
       position: relative;
       display: flex;
       justify-content: center;
-      gap: 18px;              /* more space */
+      gap: 10px;              /* more space */
       flex-wrap: wrap;
       padding-top: 10px;
       align-items: center;
@@ -156,7 +156,7 @@
 
       // make YES bigger each time
       const newScale = 1 + noClicks * 0.14;
-setYesScale(Math.min(newScale, 1.2));
+setYesScale(Math.min(newScale, 1.4));
 
       // always push NO away (prevents collision)
       const push = Math.min(noClicks * 10, 40);

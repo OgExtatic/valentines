@@ -125,11 +125,11 @@
 
     function moveNoButton() {
       // wiggle + push away so it never collides with YES
-      const max = 16; // px
+      const max = 10; // px
       const wiggleX = (Math.random() * 2 - 1) * max;
       const wiggleY = (Math.random() * 2 - 1) * max;
 
-      const push = Math.min(noClicks * 10, 90);
+      const push = Math.min(noClicks * 6, 36);
       noBtn.style.transform = `translate(${push + wiggleX}px, ${wiggleY}px)`;
     }
 

@@ -26,26 +26,36 @@
       box-shadow: 0 12px 30px rgba(0,0,0,0.08);
       text-align: center;
       backdrop-filter: blur(8px);
+        overflow: hidden;  /* prevents giant buttons from spilling out */
+
     }
     h1 { margin: 0 0 10px; font-size: clamp(28px, 4vw, 40px); }
     p { margin: 0 0 22px; font-size: 16px; opacity: 0.9; }
+
     .buttons {
       position: relative;
       display: flex;
       justify-content: center;
-      gap: 14px;
+      gap: 18px;              /* more space */
       flex-wrap: wrap;
-      padding-top: 6px;
+      padding-top: 10px;
+      align-items: center;
     }
+
     button {
       border: none;
-      border-radius: 999px;
+      border-radius: 14px;     /* more square (rounded-rectangle) */
       padding: 14px 22px;
       font-size: 18px;
       cursor: pointer;
       transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
       user-select: none;
+      min-width: 140px;        /* consistent sizing */
     }
+
+    /* helps transforms animate smoothly */
+    #yesBtn, #noBtn { will-change: transform; }
+
     #yesBtn {
       background: #ff4d7d;
       color: white;
@@ -53,11 +63,13 @@
       transform: scale(1);
     }
     #yesBtn:hover { transform: scale(var(--yesScale, 1.05)); }
+
     #noBtn {
       background: #f2f2f2;
       color: #2a2a2a;
       box-shadow: 0 10px 18px rgba(0,0,0,0.08);
     }
+
     .result {
       margin-top: 18px;
       font-size: 18px;
@@ -66,7 +78,7 @@
     }
     .result.show { display: block; }
     .tiny {
-      margin-top: 10px;
+      margin-top: 30px;
       font-size: 12px;
       opacity: 0.7;
     }
@@ -74,16 +86,16 @@
 </head>
 <body>
   <main class="card">
-    <h1>Will you be my Valentine? 💘</h1>
-    <p>I promise snacks, good vibes, and maximum appreciation.</p>
+    <h1>Will you be my Valentine? </h1>
+    <p>I have Prosecco</p>
 
     <div class="buttons" id="btnWrap">
       <button id="yesBtn">Yes </button>
       <button id="noBtn">No </button>
     </div>
 
-    <div class="result" id="result">YAY!! See you on Valentine’s!</div>
-    <div class="tiny" id="tinyHint">Tip: “No” is having a hard time today.</div>
+    <div class="result" id="result">Yay, see you on Valentine’s!</div>
+    <div class="tiny" id="tinyHint">Tip: “No” is not really working.</div>
   </main>
 
   <script>
@@ -91,7 +103,6 @@
     const noBtn  = document.getElementById("noBtn");
     const result = document.getElementById("result");
     const tinyHint = document.getElementById("tinyHint");
-    const btnWrap = document.getElementById("btnWrap");
 
     let noClicks = 0;
 
@@ -103,22 +114,23 @@
       "Come on...",
       "Last chance!",
       "Okay but… please? ",
-      "Fine… what if I say pretty please?",
+      "Maybe with pretty please?",
       "You meant YES, right?"
     ];
 
     function setYesScale(scale) {
-      // scale the button itself + update hover scale too
       yesBtn.style.transform = `scale(${scale})`;
       document.documentElement.style.setProperty("--yesScale", String(Math.min(scale + 0.05, 2)));
     }
 
     function moveNoButton() {
-      // meme-ish wiggle: nudge within a small radius
-      const max = 22; // px
-      const x = (Math.random() * 2 - 1) * max;
-      const y = (Math.random() * 2 - 1) * max;
-      noBtn.style.transform = `translate(${x}px, ${y}px)`;
+      // wiggle + push away so it never collides with YES
+      const max = 16; // px
+      const wiggleX = (Math.random() * 2 - 1) * max;
+      const wiggleY = (Math.random() * 2 - 1) * max;
+
+      const push = Math.min(noClicks * 10, 90);
+      noBtn.style.transform = `translate(${push + wiggleX}px, ${wiggleY}px)`;
     }
 
     noBtn.addEventListener("click", () => {
@@ -130,12 +142,16 @@
 
       // make YES bigger each time
       const newScale = 1 + noClicks * 0.14;
-      setYesScale(Math.min(newScale, 2.2));
+setYesScale(Math.min(newScale, 1.6));
 
-      // optional: move "No" around after a couple clicks
+      // always push NO away (prevents collision)
+      const push = Math.min(noClicks * 10, 90);
+      noBtn.style.transform = `translateX(${push}px)`;
+
+      // add wiggle after a couple clicks
       if (noClicks >= 2) moveNoButton();
 
-      // optional: fade "No" out slightly over time
+      // fade "No" slightly over time
       noBtn.style.opacity = String(Math.max(1 - noClicks * 0.07, 0.35));
 
       tinyHint.textContent = "There is only one correct answer";
@@ -144,19 +160,21 @@
     yesBtn.addEventListener("click", () => {
       result.classList.add("show");
       tinyHint.textContent = "Screenshot this moment for evidence ";
-      // lock buttons
       yesBtn.disabled = true;
       noBtn.disabled = true;
       yesBtn.style.opacity = "0.95";
       noBtn.style.opacity = "0.55";
-      // celebratory little shake
+
       yesBtn.animate(
-        [{ transform: yesBtn.style.transform }, { transform: "scale(1.1) rotate(-2deg)" }, { transform: yesBtn.style.transform }],
+        [
+          { transform: yesBtn.style.transform },
+          { transform: "scale(1.1) rotate(-2deg)" },
+          { transform: yesBtn.style.transform }
+        ],
         { duration: 350, iterations: 2 }
       );
     });
 
-    // small initial hover scale
     setYesScale(1);
   </script>
 </body>
